@@ -11,6 +11,9 @@
 # production
 /build
 
+# lock file
+*-lock.json
+
 # misc
 .DS_Store
 .env.local
