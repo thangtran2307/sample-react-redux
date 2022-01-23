@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { selectIsLoggedIn } from '../Authentication/authSlice';
 import Dashboard from '../Dashboard';
+import Sample from '../Sample';
 import ProtectedRoute from './protectedRoute';
 import RoutingPath from './routingPath';
 
@@ -16,6 +17,14 @@ export default function Routing() {
 
       <Route path={RoutingPath.Home} exact>
         <Dashboard />
+      </Route>
+
+      <Route path={RoutingPath.SampleDetail}>
+        <Sample />
+      </Route>
+
+      <Route path={RoutingPath.Sample}>
+        <Sample />
       </Route>
 
       <ProtectedRoute

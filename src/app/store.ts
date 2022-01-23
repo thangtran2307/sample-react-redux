@@ -1,14 +1,16 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 /* eslint-disable */
-import UIReducer from '../components/Ui/uiSlice';
+import uiReducer from '../components/Ui/uiSlice';
 import authReducer from '../components/Authentication/authSlice';
+import sampleReducer from '../components/Sample/sampleSlice';
 /* eslint-enable */
 
 export const store = configureStore({
   reducer: {
-    ui: UIReducer,
+    ui: uiReducer,
     auth: authReducer,
+    sample: sampleReducer,
   },
   devTools: process.env.NODE_ENV === 'development',
 });

@@ -6,7 +6,7 @@ import { selectIsLoggedIn, setIsLoggedIn } from '../Authentication/authSlice';
 import RoutingPath from '../Routing/routingPath';
 import { selectToggleLoadingScreen, toggleLoading } from '../Ui/uiSlice';
 import { apiErrorHandler } from '../../common/errorHandler';
-import { getAllSamplesAsync as getAllSamplesServiceAsync } from './dashboardService';
+import { deleteSampleByIdAsync, getAllSamplesAsync as getAllSamplesServiceAsync } from './dashboardService';
 import { Sample } from './dashboardInterfaces';
 import SampleTable from './sampleTable';
 
@@ -60,6 +60,28 @@ export default function Dashboard() {
     });
   }
 
+  function onCreateSampleButtonClicked() {
+    history.push({
+      pathname: `${RoutingPath.Sample}`,
+    });
+  }
+
+  async function onSampleDeleteHandler(sampleId: string) {
+    dispatch(toggleLoading({ isShow: true }));
+
+    try {
+      await deleteSampleByIdAsync(sampleId);
+      const filteredSamples = sampleList
+        .filter((item) => item.id !== sampleId);
+
+      setSampleList(filteredSamples);
+      dispatch(toggleLoading({ isShow: false }));
+    } catch (err: any) {
+      dispatch(toggleLoading({ isShow: false }));
+      apiErrorHandler({ error: err, type: 'Common' });
+    }
+  }
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -75,8 +97,8 @@ export default function Dashboard() {
         </Space>
 
         <Space>
-          <Button>
-            Go to Sample
+          <Button onClick={onCreateSampleButtonClicked}>
+            Create Sample
           </Button>
 
           <Button onClick={onProtectedButtonClicked}>
@@ -84,7 +106,10 @@ export default function Dashboard() {
           </Button>
         </Space>
 
-        <SampleTable sampleList={sampleList} />
+        <SampleTable
+          sampleList={sampleList}
+          onDeleteRecordHandler={onSampleDeleteHandler}
+        />
       </Space>
 
     </div>

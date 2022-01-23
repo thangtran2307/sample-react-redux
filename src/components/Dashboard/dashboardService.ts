@@ -1,12 +1,12 @@
 import { ApiError, ApiErrorMessage } from '../../common/errorHandler';
 import { Sample } from './dashboardInterfaces';
 
-const GET_ALL_SAMPLES_URL = `${process.env.REACT_APP_BACKEND_ENDPOINT}/api/Sample`;
+const SAMPLES_URL = `${process.env.REACT_APP_BACKEND_ENDPOINT}/api/Sample`;
 
 async function getAllSamplesAsync(): Promise<Sample[]> {
   if (navigator.onLine) {
     // Calling api to get list all samples
-    const response = await fetch(GET_ALL_SAMPLES_URL, {
+    const response = await fetch(SAMPLES_URL, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -24,20 +24,26 @@ async function getAllSamplesAsync(): Promise<Sample[]> {
   return Promise.reject(new ApiError(ApiErrorMessage.NoInternet, [], 500));
 }
 
-async function getAllOtherAsync(): Promise<Sample[]> {
+async function deleteSampleByIdAsync(sampleId: string): Promise<any> {
   if (navigator.onLine) {
-    // Calling api to get list all samples
-    const response = await fetch(GET_ALL_SAMPLES_URL, {
-      method: 'GET',
+    // Calling api to delete sample by id
+    const bodyRequest = {
+      id: sampleId,
+    };
+
+    const response = await fetch(SAMPLES_URL, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(bodyRequest),
     });
 
-    const data = await response.json();
     if (response.ok) {
-      return data as Sample[];
+      return true;
     }
+
+    const data = await response.json();
     return Promise.reject(new ApiError(data.message, data.errorDetail, data.statusCode));
   }
 
@@ -46,5 +52,5 @@ async function getAllOtherAsync(): Promise<Sample[]> {
 }
 
 export {
-  getAllSamplesAsync, getAllOtherAsync,
+  getAllSamplesAsync, deleteSampleByIdAsync,
 };
