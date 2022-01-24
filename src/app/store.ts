@@ -1,9 +1,18 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
+/* eslint-disable */
+import uiReducer from '../components/Ui/uiSlice';
+import authReducer from '../components/Authentication/authSlice';
+import sampleReducer from '../components/Sample/sampleSlice';
+/* eslint-enable */
+
 export const store = configureStore({
   reducer: {
-    // counter: counterReducer,
+    ui: uiReducer,
+    auth: authReducer,
+    sample: sampleReducer,
   },
+  devTools: process.env.NODE_ENV === 'development',
 });
 
 export type AppDispatch = typeof store.dispatch;
